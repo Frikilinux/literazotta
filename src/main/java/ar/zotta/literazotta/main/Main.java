@@ -9,11 +9,20 @@ public class Main {
   public void main() {
     QueryApi queryApi = new QueryApi();
 
-    String encodeText = ZUtils.encodeText("moby dick");
+    System.out.print("Nombre del libro: ");
+    var name = System.console().readLine();
 
+    String encodeText = ZUtils.encodeText(name);
     Book res = queryApi.query("?search=" + encodeText);
+    System.out.println("""
 
-    System.out.println(res.title());
+        ***** Libros Encontrado *****
+        Titulo: %s
+        Autores: %s
+        Downloads : %d
+        *****************************
+
+          """.formatted(res.title(), res.authors().get(0).name(), res.downloadCount()));
   }
 
 }
