@@ -17,12 +17,14 @@ public class Main {
     System.out.println("""
 
         ***** Libros Encontrado *****
+        Book ID: %s
         Titulo: %s
-        Autores: %s
+        Autor%s: %s
         Downloads : %d
         *****************************
 
-          """.formatted(res.title(), res.authors().get(0).name(), res.downloadCount()));
+          """.formatted(res.id(), res.title(), res.authors().size() > 1 ? "es" : null, res.authors().get(0).name(),
+        res.downloadCount()));
   }
 
 }
