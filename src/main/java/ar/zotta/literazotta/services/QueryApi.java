@@ -6,12 +6,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import ar.zotta.literazotta.models.ApiResults;
-import ar.zotta.literazotta.models.Book;
+import ar.zotta.literazotta.models.BookData;
 import ar.zotta.literazotta.utils.ZUtils;
 
 public class QueryApi {
 
-  public Book query(String endpoint) {
+  public BookData query(String endpoint) {
 
     final String BASE_URL = "https://gutendex.com/books/";
     // if (url == null || url.isEmpty()) {
@@ -27,7 +27,7 @@ public class QueryApi {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
       var conv = ZUtils.dataProcess(response.body(), ApiResults.class);
-      Book book = conv.results().get(0);
+      BookData book = conv.results().get(0);
 
       return book;
 

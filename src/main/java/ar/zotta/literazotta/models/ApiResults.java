@@ -5,6 +5,6 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ApiResults(ArrayList<Book> results) {
+public record ApiResults(ArrayList<BookData> results) {
 
 }
