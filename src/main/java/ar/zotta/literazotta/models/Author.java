@@ -32,7 +32,11 @@ public class Author {
   // @ManyToMany(mappedBy = personDB, cascade = CascadeType.ALL, fetch =
   // FetcType.EAGER)
   @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  List<Book> book = new ArrayList<>();
+  // List<Book> book = new ArrayList<>();
+  List<Book> books;
+
+  public Author() {
+  }
 
   public Author(PersonData personData) {
     this.name = personData.name();
@@ -41,7 +45,12 @@ public class Author {
   }
 
   public void setBook(Book book) {
-    this.book.add(book);
+    book.setAuthor(this);
+    // List<Book> books = new ArrayList<>();
+    // this.book = new ArrayList<Book>();
+    List<Book> books = new ArrayList<>();
+    books.add(book);
+    this.books = books;
   }
 
   public Long getId() {

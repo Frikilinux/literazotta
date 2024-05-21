@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,9 @@ public class Book {
     // @ManyToOne
     Author author;
 
+    public Book() {
+    }
+
     public Book(BookData bookData) {
         this.bookId = bookData.bookId();
         this.title = bookData.title();
@@ -41,9 +44,8 @@ public class Book {
         this.downloadCount = bookData.downloadCount();
     }
 
-    public void setAuthors(List<Author> authors) {
-        authors.forEach(a -> a.setBook(this));
-        this.author = authors.get(0);
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Integer getBookId() {
