@@ -31,8 +31,11 @@ public class Book {
 
     // @Transient
     @ManyToOne(cascade = CascadeType.ALL)
-    // @ManyToOne
+    @JoinColumn(name = "author_id", insertable = false, updatable = false)
     Author author;
+
+    public Book() {
+    }
 
     public Book(BookData bookData) {
         this.bookId = bookData.bookId();
@@ -41,9 +44,13 @@ public class Book {
         this.downloadCount = bookData.downloadCount();
     }
 
-    public void setAuthors(List<Author> authors) {
-        authors.forEach(a -> a.setBook(this));
-        this.author = authors.get(0);
+    public void setAuthor(Author author) {
+        author.setBook(this);
+        this.author = author;
+    }
+
+    public Author getAuthor() {
+        return author;
     }
 
     public Integer getBookId() {
@@ -76,5 +83,11 @@ public class Book {
 
     public void setDownloadCount(Integer downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return "Titulo: " + title + " autor: " + author.getName();
     }
 }

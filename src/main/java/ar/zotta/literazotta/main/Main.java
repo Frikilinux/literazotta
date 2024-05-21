@@ -1,6 +1,7 @@
 package ar.zotta.literazotta.main;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import ar.zotta.literazotta.models.Author;
@@ -61,32 +62,41 @@ public class Main {
   }
 
   private String userInput() {
-    return System.console().readLine();
+    Scanner input = new Scanner(System.in);
+    return input.nextLine();
   }
 
   private void printBookList(List<BookData> bookList) {
     for (int i = 0; i < bookList.size(); i++) {
-      String authors = bookList.get(i).authors().get(0).name();
-      System.out.println(String.format("%d - Titulo: %s por %s", i + 1, bookList.get(i).title(), authors));
+      String author = bookList.get(i).authors().get(0).name();
+      System.out.println(String.format("%d - Titulo: %s por %s", i + 1, bookList.get(i).title(), author));
     }
   }
 
   private void saveBookToDB(BookData bookData) {
+
+    List<Author> authors = libraryRepository.searchAuthor(bookData.authors().get(0).name());
     Book book = new Book(bookData);
 
-    List<Author> authors = bookData.authors().stream()
-    .map(a -> new Author(a))
-    .collect(Collectors.toList());
+    if (authors.isEmpty()) {
+      Author author = new Author(bookData.authors().get(0));
+      book.setAuthor(author);
+    } else {
+      book.setAuthor(authors.get(0));
+    }
 
-    book.setAuthors(authors);
+    // System.out.println("AUTOR ENCONTRADO EN DB" + books);
+
     libraryRepository.save(book);
+    // System.out.println(book);
   }
 
   private void searchAndSave() {
     System.out.print("Nombre del libro o autor: ");
     var searchText = userInput();
+    var newString = searchText.toString();
 
-    List<BookData> res = queryApi.query(ZUtils.encodeText(searchText)).stream()
+    List<BookData> res = queryApi.query(ZUtils.encodeText(newString)).stream()
         .limit(9)
         .collect(Collectors.toList());
 
@@ -103,7 +113,7 @@ public class Main {
       if (option <= 0 || option > res.size()) {
         System.out.println("Opcion incorrecta, excoge otra");
       } else {
-        System.out.println("Guardado " + res.get(option -1).title() + " en la base de datos. :)" );
+        System.out.println("Guardado " + res.get(option - 1).title() + " en la base de datos. :)");
         saveBookToDB(res.get(option - 1));
         break;
       }
