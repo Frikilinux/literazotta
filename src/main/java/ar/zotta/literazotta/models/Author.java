@@ -30,12 +30,10 @@ public class Author {
   String birthYear;
   String deathYear;
 
-  @OneToMany()
-  @JoinColumn(name = "author_id")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "author")
   List<Book> book = new ArrayList<>();
 
-  public Author() {
-  }
+
 
   public Author(PersonData personData) {
     this.name = personData.name();
@@ -43,9 +41,17 @@ public class Author {
     this.deathYear = personData.deathYear();
   }
 
+  public Author() {
+
+  }
+
   public void setBook(Book book) {
     this.book.add(book);
   }
+
+    public List<Book> getBook() {
+        return book;
+    }
 
   public Long getId() {
     return id;

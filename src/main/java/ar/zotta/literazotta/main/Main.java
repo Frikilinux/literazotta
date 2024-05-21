@@ -8,15 +8,22 @@ import ar.zotta.literazotta.models.Author;
 import ar.zotta.literazotta.models.Book;
 import ar.zotta.literazotta.models.BookData;
 import ar.zotta.literazotta.repository.LibraryRepository;
+import ar.zotta.literazotta.services.BookService;
 import ar.zotta.literazotta.services.QueryApi;
 import ar.zotta.literazotta.utils.ZUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
+import javax.swing.text.html.parser.Entity;
 
 public class Main {
   private LibraryRepository libraryRepository;
+  private BookService bookService;
   QueryApi queryApi = new QueryApi();
 
-  public Main(LibraryRepository libraryRepository) {
+  public Main(LibraryRepository libraryRepository, BookService bookService) {
     this.libraryRepository = libraryRepository;
+    this.bookService = bookService;
   }
 
   public void mainMenu() {
@@ -114,7 +121,8 @@ public class Main {
         System.out.println("Opcion incorrecta, excoge otra");
       } else {
         System.out.println("Guardado " + res.get(option - 1).title() + " en la base de datos. :)");
-        saveBookToDB(res.get(option - 1));
+        bookService.createAndSaveBook(res.get(option - 1), res.get(option - 1).authors().get(0));
+//        saveBookToDB(res.get(option - 1));
         break;
       }
 

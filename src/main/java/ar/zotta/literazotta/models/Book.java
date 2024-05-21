@@ -30,8 +30,7 @@ public class Book {
     Integer downloadCount;
 
     // @Transient
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "author_id", insertable = false, updatable = false)
+    @ManyToOne
     Author author;
 
     public Book() {
