@@ -22,6 +22,7 @@ public class Book {
     String title;
     Boolean copyright;
     Integer downloadCount;
+    String language;
 
     // @Transient
     @ManyToOne(cascade = CascadeType.ALL)
@@ -36,6 +37,7 @@ public class Book {
         this.title = bookData.title();
         this.copyright = bookData.copyright();
         this.downloadCount = bookData.downloadCount();
+        this.language = String.join(", ", bookData.languages());
     }
 
     public void setAuthor(Author author) {
@@ -72,5 +74,9 @@ public class Book {
 
     public void setDownloadCount(Integer downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

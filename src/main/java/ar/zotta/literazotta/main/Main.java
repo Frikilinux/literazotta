@@ -22,7 +22,7 @@ public class Main {
 
   public void main() {
 
-    var option = -1;
+    int option = -1;
 
     String menu = """
 
@@ -38,7 +38,15 @@ public class Main {
 
       System.out.println(menu);
       System.out.print("Opcion: ");
-      option = Integer.parseInt(userInput());
+
+      try {
+        option = Integer.parseInt(userInput());
+      } catch (NumberFormatException e) {
+        System.out.println("Introduce sólo numeros");
+        option = -1;
+      } catch (Exception e) {
+        System.out.println("Error desconocido" + e);
+      }
 
       switch (option) {
         case 1:
@@ -52,6 +60,8 @@ public class Main {
           break;
 
         default:
+          System.out.println("");
+          System.out.println("Opción no válida, intentalo otra vez.");
           break;
       }
     }
@@ -78,7 +88,7 @@ public class Main {
       authors.stream()
           .forEach(a -> System.out
               .println("Nombre: " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")"));
-      System.out.println("\n======================== ɸ ========================");
+      System.out.println("\n========================= ɸ =========================");
       break;
 
     }
@@ -91,7 +101,7 @@ public class Main {
       System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")");
       a.getBooks().forEach(b -> System.out.println(b.getTitle()));
     });
-    System.out.println("\n======================== ɸ ========================");
+    System.out.println("\n========================= ɸ =========================");
   }
 
   private String userInput() {

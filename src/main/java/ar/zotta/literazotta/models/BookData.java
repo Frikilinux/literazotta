@@ -7,11 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record BookData(
-        @JsonAlias("id") Integer bookId,
         // List<String> sujects,
+        // List<PersonData> translators,
+        @JsonAlias("id") Integer bookId,
         String title,
         List<PersonData> authors,
-        // List<PersonData> translators,
+        List<String> languages,
         Boolean copyright,
         @JsonAlias("download_count") Integer downloadCount) {
 
