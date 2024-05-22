@@ -20,6 +20,9 @@ public record BookData(
         if (authors.size() == 0) {
             authors.add(new PersonData("0", "0", "Unknown"));
         }
+        if (languages.size() == 0) {
+            languages = List.of("Unknown");
+        }
     }
 
 }

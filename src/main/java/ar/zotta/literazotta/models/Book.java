@@ -24,9 +24,7 @@ public class Book {
     Integer downloadCount;
     String language;
 
-    // @Transient
     @ManyToOne(cascade = CascadeType.ALL)
-    // @ManyToOne
     Author author;
 
     public Book() {

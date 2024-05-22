@@ -30,6 +30,9 @@ public class Main {
           1 - Buscar libros por titulo o autor y guardarlos
           2 - Lista de libros guardados
           3 - Lista autores desde un año
+          4 - Listar Libros por idioma
+
+          0 - Salir
         =====================================================
 
         """;
@@ -53,10 +56,13 @@ public class Main {
           searchAndSave();
           break;
         case 2:
-          ListAllBooks();
+          listAllBooks();
           break;
         case 3:
-          ListAuthorsFromYear();
+          listAuthorsFromYear();
+          break;
+        case 4:
+          listBooksByLanguage();
           break;
 
         default:
@@ -67,7 +73,27 @@ public class Main {
     }
   }
 
-  private void ListAuthorsFromYear() {
+  private void listBooksByLanguage() {
+    List<String> availableLanguages = libraryRepository.avalableLanguages();
+    String languages = String.join(" - ", availableLanguages);
+
+    while (true) {
+      System.out.println("\nIdiomas disponibles: " + languages + " Selecciona uno ");
+      var option = userInput();
+
+      if (availableLanguages.contains(option)) {
+        List<Author> authors = libraryRepository.listBooksByLanguage(option);
+        // System.out.println(option);
+        printListOfAuthors(authors);
+        break;
+
+      } else {
+        System.out.println("Idioma no disponible :(, selecciona otro!");
+      }
+    }
+  }
+
+  private void listAuthorsFromYear() {
     while (true) {
       System.out.print("Introduce un año: ");
       var year = Integer.valueOf(userInput());
@@ -87,21 +113,26 @@ public class Main {
       System.out.println("=========== Autores encontrados desde el año " + year);
       authors.stream()
           .forEach(a -> System.out
-              .println("Nombre: " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")"));
+              .println("Nombre: " + a.getName() + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")"));
       System.out.println("\n========================= ɸ =========================");
       break;
 
     }
   }
 
-  private void ListAllBooks() {
-    List<Author> authors = libraryRepository.findAll();
+  private void printListOfAuthors(List<Author> authors) {
     authors.stream().forEach(a -> {
       System.out.println("");
       System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")");
       a.getBooks().forEach(b -> System.out.println(b.getTitle()));
     });
     System.out.println("\n========================= ɸ =========================");
+  }
+
+  private void listAllBooks() {
+    List<Author> authors = libraryRepository.findAll();
+    printListOfAuthors(authors);
+
   }
 
   private String userInput() {

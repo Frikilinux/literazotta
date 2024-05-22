@@ -18,4 +18,10 @@ public interface LibraryRepository extends JpaRepository<Author, Long> {
 
   @Query("SELECT a FROM Author a WHERE a.birthYear >= :birthYear ")
   List<Author> listAllBooks(Integer birthYear);
+
+  @Query("SELECT DISTINCT b.language FROM Book b")
+  List<String> avalableLanguages();
+
+  @Query("SELECT a FROM Author a JOIN a.books b WHERE b.language = :language")
+  List<Author> listBooksByLanguage(String language);
 }
