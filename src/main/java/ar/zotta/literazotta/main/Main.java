@@ -24,15 +24,17 @@ public class Main {
 
     var option = -1;
 
+    String menu = """
+
+        =====================================================
+          1 - Buscar libros por titulo o autor y guardarlos
+          2 - Lista de libros guardados
+          3 - Lista autores desde un año
+        =====================================================
+
+        """;
+
     while (option != 0) {
-      String menu = """
-
-          =====================================================
-            1 - Buscar libros por titulo o autor y guardarlos
-            2 - Lista de libros guardados
-          =====================================================
-
-          """;
 
       System.out.println(menu);
       System.out.print("Opcion: ");
@@ -45,6 +47,9 @@ public class Main {
         case 2:
           ListAllBooks();
           break;
+        case 3:
+          ListAuthorsFromYear();
+          break;
 
         default:
           break;
@@ -52,14 +57,41 @@ public class Main {
     }
   }
 
+  private void ListAuthorsFromYear() {
+    while (true) {
+      System.out.print("Introduce un año: ");
+      var year = Integer.valueOf(userInput());
+      List<Author> authors;
+      try {
+        authors = libraryRepository.listAllBooks(year);
+      } catch (Exception e) {
+        System.out.println("ERROR" + e);
+        authors = List.of();
+      }
+
+      if (authors.isEmpty()) {
+        System.out.println("No se encontraron autores en ese año, ingresa otro");
+        continue;
+      }
+
+      System.out.println("=========== Autores encontrados desde el año " + year);
+      authors.stream()
+          .forEach(a -> System.out
+              .println("Nombre: " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")"));
+      System.out.println("\n======================== ɸ ========================");
+      break;
+
+    }
+  }
+
   private void ListAllBooks() {
     List<Author> authors = libraryRepository.findAll();
-    System.out.println(authors.size());
     authors.stream().forEach(a -> {
       System.out.println("");
       System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")");
       a.getBooks().forEach(b -> System.out.println(b.getTitle()));
     });
+    System.out.println("\n======================== ɸ ========================");
   }
 
   private String userInput() {
@@ -94,7 +126,7 @@ public class Main {
     author.setBook(book);
     try {
       libraryRepository.save(author);
-      System.out.println("Guardado " + book.getTitle() + " en la base de datos. :)");
+      System.out.println("\nGuardado " + book.getTitle() + " en la base de datos. :)");
 
     } catch (Exception e) {
       System.out.println("ERROR!: " + e);
