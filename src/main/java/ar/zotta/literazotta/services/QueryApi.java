@@ -36,7 +36,7 @@ public class QueryApi {
 
     } catch (Exception e) {
       System.out.println("Error perro: " + e);
-      return null;
+      return List.of();
       // throw new RuntimeException(e);
     }
   }

@@ -1,6 +1,8 @@
 package ar.zotta.literazotta.main;
 
 import java.util.List;
+import java.util.Optional;
+// import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import ar.zotta.literazotta.models.Author;
@@ -31,13 +33,17 @@ public class Main {
           =====================================================
 
           """;
-      System.out.println(menu);
 
+      System.out.println(menu);
+      System.out.print("Opcion: ");
       option = Integer.parseInt(userInput());
 
       switch (option) {
         case 1:
           searchAndSave();
+          break;
+        case 2:
+          ListAllBooks();
           break;
 
         default:
@@ -46,44 +52,31 @@ public class Main {
     }
   }
 
-  // System.out.print("Nombre del libro: ");
-  // var name = System.console().readLine();
+  private void ListAllBooks() {
+    List<Author> authors = libraryRepository.findAll();
+    System.out.println(authors.size());
+    authors.stream().forEach(a -> {
+      System.out.println("");
+      System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")");
+      a.getBooks().forEach(b -> System.out.println(b.getTitle()));
+    });
+  }
 
-  // String encodeText = ZUtils.encodeText(name);
-  // BookData res = queryApi.query("?search=" + encodeText);
-  // System.out.println("""
-
-  // ***** Libros Encontrado *****
-  // Book ID: %s
-  // Titulo: %s
-  // Autor%s: %s
-  // Downloads : %d
-  // *****************************
-
-  // """.formatted(res.bookId(), res.title(), res.authors().size() > 1 ? "es" :
-  // "", res.authors().get(0).name(),
-  // res.downloadCount()));
-
-  // Author author = new Author(res.authors().get(0));
-  // Book book = new Book(res);
-  // author.setBook(book);
-  // // List<Author> authors = res.authors().stream().map(a -> new
-  // Author(a)).collect(Collectors.toList());
-
-  // libraryRepository.save(author);
-
-  //////////////////////////////////////
   private String userInput() {
     var name = System.console().readLine();
+    // Scanner input = new Scanner(System.in);
+    // var name = input.next();
+    // input.close();
     return name;
   }
 
   private void saveBookToDB(BookData bookData) {
-    Book BookInDB = libraryRepository.searchBookByBookId(bookData.bookId());
+    Optional<Book> BookInDB = libraryRepository.searchBookByBookId(bookData.bookId());
 
-    if (BookInDB != null) {
-      System.out.println("Libro existente en la DB");
-      System.out.println("Titulo: " + BookInDB.getTitle());
+    if (BookInDB.isPresent()) {
+      System.out.println("");
+      System.out.println("Libro existente en la DB. Puedes realizar otra busqueda.");
+      System.out.println("Titulo: " + BookInDB.get().getTitle());
       return;
     }
 
@@ -99,10 +92,14 @@ public class Main {
 
     // System.out.println("AUTOR ENCONTRADO EN DB" + books);
     author.setBook(book);
-    libraryRepository.save(author);
-    System.out.println("Guardado " + book.getTitle() + " en la base de datos. :)");
+    try {
+      libraryRepository.save(author);
+      System.out.println("Guardado " + book.getTitle() + " en la base de datos. :)");
+
+    } catch (Exception e) {
+      System.out.println("ERROR!: " + e);
+    }
   }
-  // Syste
 
   private void printBookList(List<BookData> bookList) {
     for (int i = 0; i < bookList.size(); i++) {
@@ -126,13 +123,13 @@ public class Main {
     printBookList(response);
 
     while (true) {
-      System.out.println("Seleccona un libro");
+      System.out.print("Seleccona un libro: ");
       int option = Integer.parseInt(userInput());
 
       if (option <= 0 || option > response.size()) {
+        System.out.println("");
         System.out.println("Opcion incorrecta, excoge otra");
       } else {
-        
         saveBookToDB(response.get(option - 1));
         break;
       }
