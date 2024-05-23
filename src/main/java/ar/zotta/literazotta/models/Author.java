@@ -82,4 +82,9 @@ public class Author {
     this.deathYear = deathYear;
   }
 
+  @Override
+  public String toString() {
+    return "NAME A: " + this.name;
+  }
+
 }

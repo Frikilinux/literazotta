@@ -45,7 +45,7 @@ public class Main {
       try {
         option = Integer.parseInt(userInput());
       } catch (NumberFormatException e) {
-        System.out.println("Introduce sólo numeros");
+        System.out.println("\n Introduce sólo numeros");
         option = -1;
       } catch (Exception e) {
         System.out.println("Error desconocido" + e);
@@ -64,6 +64,8 @@ public class Main {
         case 4:
           listBooksByLanguage();
           break;
+        case 0:
+          break;
 
         default:
           System.out.println("");
@@ -71,6 +73,10 @@ public class Main {
           break;
       }
     }
+    System.out.println("\nAdiós y recuerda:");
+    System.out.println(
+        "“Las personas libres jamás podrán concebir lo que los libros significan para quienes vivimos encerrados.”");
+    System.out.println("        —  Ana Frank\n");
   }
 
   private void listBooksByLanguage() {
@@ -83,8 +89,20 @@ public class Main {
 
       if (availableLanguages.contains(option)) {
         List<Author> authors = libraryRepository.listBooksByLanguage(option);
-        // System.out.println(option);
-        printListOfAuthors(authors);
+
+        authors.stream().forEach(a -> {
+          System.out.println("");
+          System.out.println("Lista de autores y sus libros en el idioma " + option);
+          System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")");
+          a.getBooks().forEach(b -> {
+            if (b.getLanguage().equals(option)) {
+              System.out
+                  .println(b.getTitle() + " - idioma: " + b.getLanguage() + " - Descargas: " + b.getDownloadCount());
+            }
+          });
+        });
+        System.out.println("\n========================= ɸ =========================");
+
         break;
 
       } else {
