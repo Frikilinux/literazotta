@@ -24,4 +24,7 @@ public interface LibraryRepository extends JpaRepository<Author, Long> {
 
   @Query("SELECT a FROM Author a INNER JOIN a.books b WHERE b.language = :language")
   List<Author> listBooksByLanguage(String language);
+
+  @Query("SELECT b FROM Author a JOIN a.books b ORDER BY b.downloadCount DESC LIMIT 10")
+  List<Book> listTop10Books();
 }

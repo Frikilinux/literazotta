@@ -10,6 +10,7 @@ import ar.zotta.literazotta.models.Book;
 import ar.zotta.literazotta.models.BookData;
 import ar.zotta.literazotta.repository.LibraryRepository;
 import ar.zotta.literazotta.services.QueryApi;
+import ar.zotta.literazotta.services.QueryLanguage;
 import ar.zotta.literazotta.utils.ZUtils;
 
 public class Main {
@@ -31,6 +32,7 @@ public class Main {
           2 - Lista de libros guardados
           3 - Lista autores desde un año
           4 - Listar Libros por idioma
+          5 - Top 10 de libros descargados.
 
           0 - Salir
         =====================================================
@@ -64,6 +66,9 @@ public class Main {
         case 4:
           listBooksByLanguage();
           break;
+        case 5:
+          listTop10();
+          break;
         case 0:
           break;
 
@@ -79,20 +84,37 @@ public class Main {
     System.out.println("        —  Ana Frank\n");
   }
 
+  private void listTop10() {
+    List<Book> books = libraryRepository.listTop10Books();
+
+    for (int i = 0; i < books.size(); i++) {
+      Book book = books.get(i);
+      System.out
+          .println(String.format("%d - Descargas: %d Titulo: %s", i + 1, book.getDownloadCount(), book.getTitle()));
+    }
+
+    // System.out.println(books);
+  }
+
   private void listBooksByLanguage() {
     List<String> availableLanguages = libraryRepository.avalableLanguages();
-    String languages = String.join(" - ", availableLanguages);
+
+    // String languages = String.join(" - ", availableLanguages);
+    String languages = availableLanguages.stream().map(l -> l.toUpperCase() + " (" + QueryLanguage.query(l) + ")")
+        .collect(Collectors.joining(" - "));
 
     while (true) {
-      System.out.println("\nIdiomas disponibles: " + languages + " Selecciona uno ");
-      var option = userInput();
+      System.out.print("\nIdiomas disponibles: " + languages + " Selecciona uno: ");
+
+      var option = userInput().toLowerCase();
 
       if (availableLanguages.contains(option)) {
         List<Author> authors = libraryRepository.listBooksByLanguage(option);
 
         authors.stream().forEach(a -> {
           System.out.println("");
-          System.out.println("Lista de autores y sus libros en el idioma " + option);
+          System.out.println("Lista de autores y sus libros en el idioma " + option.toUpperCase() + " ("
+              + QueryLanguage.query(option) + ")");
           System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")");
           a.getBooks().forEach(b -> {
             if (b.getLanguage().equals(option)) {
