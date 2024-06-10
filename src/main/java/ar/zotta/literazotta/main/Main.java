@@ -11,6 +11,8 @@ import ar.zotta.literazotta.models.BookData;
 import ar.zotta.literazotta.repository.LibraryRepository;
 import ar.zotta.literazotta.services.QueryApi;
 import ar.zotta.literazotta.services.QueryLanguage;
+import ar.zotta.literazotta.utils.CliColors;
+import ar.zotta.literazotta.utils.Ui;
 import ar.zotta.literazotta.utils.ZUtils;
 
 public class Main {
@@ -115,7 +117,8 @@ public class Main {
           System.out.println("");
           System.out.println("Lista de autores y sus libros en el idioma " + option.toUpperCase() + " ("
               + QueryLanguage.query(option) + ")");
-          System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")");
+          System.out.println("========== " + ZUtils.nameFormat(a.getName()) + " (" + a.getBirthYear() + " - "
+              + a.getDeathYear() + ")");
           a.getBooks().forEach(b -> {
             if (b.getLanguage().equals(option)) {
               System.out
@@ -123,7 +126,7 @@ public class Main {
             }
           });
         });
-        System.out.println("\n========================= ɸ =========================");
+        Ui.endLine();
 
         break;
 
@@ -153,8 +156,9 @@ public class Main {
       System.out.println("=========== Autores encontrados desde el año " + year);
       authors.stream()
           .forEach(a -> System.out
-              .println("Nombre: " + a.getName() + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")"));
-      System.out.println("\n========================= ɸ =========================");
+              .println("Nombre: " + ZUtils.nameFormat(a.getName()) + " (" + a.getBirthYear() + " - " + a.getDeathYear()
+                  + ")"));
+      Ui.endLine();
       break;
 
     }
@@ -163,10 +167,12 @@ public class Main {
   private void printListOfAuthors(List<Author> authors) {
     authors.stream().forEach(a -> {
       System.out.println("");
-      System.out.println("========== " + a.getName() + " (" + a.getBirthYear() + "-" + a.getDeathYear() + ")");
+      System.out.println(CliColors.GREEN + "========== " + CliColors.YELLOW_BOLD + ZUtils.nameFormat(a.getName()) + " ("
+          + a.getBirthYear()
+          + "-" + a.getDeathYear() + ")" + CliColors.RESET);
       a.getBooks().forEach(b -> System.out.println(b.getTitle()));
     });
-    System.out.println("\n========================= ɸ =========================");
+    Ui.endLine();
   }
 
   private void listAllBooks() {

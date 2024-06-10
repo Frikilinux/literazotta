@@ -2,6 +2,7 @@ package ar.zotta.literazotta.utils;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,11 @@ public class ZUtils {
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static String nameFormat(String name) {
+    String[] names = name.split(", ");
+    return names[1] + " " + names[0];
   }
 
 }
