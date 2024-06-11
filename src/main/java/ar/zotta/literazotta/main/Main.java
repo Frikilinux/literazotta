@@ -30,13 +30,14 @@ public class Main {
     String menu = """
 
         =====================================================
-          1 - Buscar libros por titulo o autor y guardarlos
-          2 - Lista de libros guardados
-          3 - Lista autores desde un año
-          4 - Listar Libros por idioma
+          1 - Buscar libros por titulo o autor y guardarlos.
+          2 - Lista de libros guardados.
+          3 - Lista autores vivos en determinado año.
+          4 - Listar Libros por idioma.
           5 - Top 10 de libros descargados.
-
-          0 - Salir
+          6 - Buscar autor por nombre.
+          ---------------------------------------------------
+          0 - Salir.
         =====================================================
 
         """;
@@ -71,6 +72,9 @@ public class Main {
         case 5:
           listTop10();
           break;
+        case 6:
+          SearchByAuthorName();
+          break;
         case 0:
           break;
 
@@ -86,14 +90,32 @@ public class Main {
     System.out.println("        —  Ana Frank\n");
   }
 
+  private void SearchByAuthorName() {
+    var authorName = userInput();
+    List<Author> authorInDB = libraryRepository.searchAuthor(authorName);
+    if (authorInDB.isEmpty()) {
+      System.out.println("No se encontraron autor con este nombre");
+      return;
+    }
+    for (int i = 0; i < authorInDB.size(); i++) {
+      Author author = authorInDB.get(i);
+      System.out.println("Autores encontrados: ");
+      System.out.println(
+          ZUtils.nameFormat(author.getName()) + " (" + author.getBirthYear() + " - " + author.getDeathYear() + ")");
+    }
+  }
+
   private void listTop10() {
     List<Book> books = libraryRepository.listTop10Books();
 
+    System.out.println(
+        CliColors.GREEN + "========== " + CliColors.YELLOW_BOLD + "Los 10 libros más descagados" + CliColors.RESET);
     for (int i = 0; i < books.size(); i++) {
       Book book = books.get(i);
       System.out
           .println(String.format("%d - Descargas: %d Titulo: %s", i + 1, book.getDownloadCount(), book.getTitle()));
     }
+    Ui.endLine();
 
     // System.out.println(books);
   }
@@ -115,10 +137,10 @@ public class Main {
 
         authors.stream().forEach(a -> {
           System.out.println("");
-          System.out.println("Lista de autores y sus libros en el idioma " + option.toUpperCase() + " ("
-              + QueryLanguage.query(option) + ")");
-          System.out.println("========== " + ZUtils.nameFormat(a.getName()) + " (" + a.getBirthYear() + " - "
-              + a.getDeathYear() + ")");
+          System.out.println(CliColors.BLUE_BOLD_BRIGHT + "Lista de autores y sus libros en el idioma "
+              + option.toUpperCase() + " (" + QueryLanguage.query(option) + ")" + CliColors.RESET);
+          System.out.println(CliColors.GREEN + "========== " + CliColors.YELLOW_BOLD + ZUtils.nameFormat(a.getName())
+              + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")" + CliColors.RESET);
           a.getBooks().forEach(b -> {
             if (b.getLanguage().equals(option)) {
               System.out
@@ -153,11 +175,12 @@ public class Main {
         continue;
       }
 
-      System.out.println("=========== Autores encontrados desde el año " + year);
+      System.out.println(CliColors.GREEN + "========== " + CliColors.YELLOW_BOLD + " Autores vivos en el año " + year
+          + CliColors.RESET);
       authors.stream()
           .forEach(a -> System.out
-              .println("Nombre: " + ZUtils.nameFormat(a.getName()) + " (" + a.getBirthYear() + " - " + a.getDeathYear()
-                  + ")"));
+              .println(CliColors.CYAN + ZUtils.nameFormat(a.getName()) + CliColors.PURPLE_BOLD_BRIGHT + " ("
+                  + a.getBirthYear() + " - " + a.getDeathYear() + ")" + CliColors.RESET));
       Ui.endLine();
       break;
 
