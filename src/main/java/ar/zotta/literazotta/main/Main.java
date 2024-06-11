@@ -91,10 +91,11 @@ public class Main {
   }
 
   private void SearchByAuthorName() {
+    System.out.println("Ingresa un nombre: ");
     var authorName = userInput();
     List<Author> authorInDB = libraryRepository.searchAuthor(authorName);
     if (authorInDB.isEmpty()) {
-      System.out.println("No se encontraron autor con este nombre");
+      System.out.println("No se encontraron autores con este nombre");
       return;
     }
     for (int i = 0; i < authorInDB.size(); i++) {
