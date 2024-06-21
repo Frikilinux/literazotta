@@ -27,6 +27,14 @@ public class Main {
 
     int option = -1;
 
+    String art = CliColors.BLUE_BOLD
+        + "                 .--.   _\r\n             .---|__| .((\\=.\r\n          .--|===|--|/    ,(,\r\n          |  |===|  |\\      y\r\n          |%%|   |  | `.__,'\r\n          |%%|   |  | /  \\\\\\\r\n          |  |   |  |/|  | \\`----.\r\n          |  |   |  ||\\  \\  |___.'_\r\n         _|  |   |__||,\\  \\-+-._.' )_\r\n        / |  |===|--|\\  \\  \\      /  \\\r\n       /  `--^---'--' `--`-'---^-'    \\\r\n      '================================`"
+        + CliColors.RESET;
+
+    String title = CliColors.YELLOW
+        + "\r\n     _                                     \r\n ___/__) ,                                 \r\n(, /      _/_  _  __  _   _   ____/__/_ _  \r\n  /    _(_(___(/_/ (_(_(_'_)_(_) (__(__(_(_\r\n (_____                 .-/                \r\n        )              (_/                 \r"
+        + CliColors.RESET;
+
     String menu = """
 
         =====================================================
@@ -43,7 +51,8 @@ public class Main {
         """;
 
     while (option != 0) {
-
+      System.out.println(art);
+      System.out.println(title);
       System.out.println(menu);
       System.out.print("Opcion: ");
 
@@ -136,10 +145,10 @@ public class Main {
       if (availableLanguages.contains(option)) {
         List<Author> authors = libraryRepository.listBooksByLanguage(option);
 
+        System.out.println(CliColors.BLUE_BOLD_BRIGHT + "Lista de autores y sus libros en el idioma "
+            + option.toUpperCase() + " (" + QueryLanguage.query(option) + ")" + CliColors.RESET);
         authors.stream().forEach(a -> {
           System.out.println("");
-          System.out.println(CliColors.BLUE_BOLD_BRIGHT + "Lista de autores y sus libros en el idioma "
-              + option.toUpperCase() + " (" + QueryLanguage.query(option) + ")" + CliColors.RESET);
           System.out.println(CliColors.GREEN + "========== " + CliColors.YELLOW_BOLD + ZUtils.nameFormat(a.getName())
               + " (" + a.getBirthYear() + " - " + a.getDeathYear() + ")" + CliColors.RESET);
           a.getBooks().forEach(b -> {
@@ -269,10 +278,12 @@ public class Main {
       return;
     }
 
+    System.out.println(CliColors.WHITE_BOLD + "\nLista de libros encontrados:\n" + CliColors.RESET);
+
     printBookList(response);
 
     while (true) {
-      System.out.print("\nSeleccona un libro o 0 para ir al menú principal: ");
+      System.out.print("\nSelecciona un libro o 0 para ir al menú principal: ");
       int option = Integer.parseInt(userInput());
       if (option == 0) {
         break;
