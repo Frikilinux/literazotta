@@ -10,10 +10,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "author")
@@ -29,10 +27,11 @@ public class Author {
   String birthYear;
   String deathYear;
 
-  // @ManyToMany(mappedBy = personDB, cascade = CascadeType.ALL, fetch =
-  // FetcType.EAGER)
   @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  List<Book> book = new ArrayList<>();
+  List<Book> books;
+
+  public Author() {
+  }
 
   public Author(PersonData personData) {
     this.name = personData.name();
@@ -41,7 +40,14 @@ public class Author {
   }
 
   public void setBook(Book book) {
-    this.book.add(book);
+    book.setAuthor(this);
+    List<Book> books = new ArrayList<>();
+    books.add(book);
+    this.books = books;
+  }
+
+  public List<Book> getBooks() {
+    return books;
   }
 
   public Long getId() {
@@ -74,6 +80,11 @@ public class Author {
 
   public void setDeathYear(String deathYear) {
     this.deathYear = deathYear;
+  }
+
+  @Override
+  public String toString() {
+    return "NAME A: " + this.name;
   }
 
 }

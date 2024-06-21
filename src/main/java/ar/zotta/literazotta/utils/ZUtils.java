@@ -19,4 +19,17 @@ public class ZUtils {
     }
   }
 
+  public static String nameFormat(String name) {
+    if (name == "Unknown") {
+      return name;
+    }
+
+    if (!name.contains(", ")) {
+      return name;
+    }
+
+    String[] names = name.split(", ");
+    return names[1] + " " + names[0];
+  }
+
 }

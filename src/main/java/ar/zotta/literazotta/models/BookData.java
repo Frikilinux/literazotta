@@ -7,12 +7,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record BookData(
-    @JsonAlias("id") Integer bookId,
-    // List<String> sujects,
-    String title,
-    List<PersonData> authors,
-    // List<PersonData> translators,
-    Boolean copyright,
-    @JsonAlias("download_count") Integer downloadCount) {
+        // List<String> sujects,
+        // List<PersonData> translators,
+        @JsonAlias("id") Integer bookId,
+        String title,
+        List<PersonData> authors,
+        List<String> languages,
+        Boolean copyright,
+        @JsonAlias("download_count") Integer downloadCount) {
+
+    public BookData {
+        if (authors.size() == 0) {
+            authors.add(new PersonData("0", "0", "Unknown"));
+        }
+        if (languages.size() == 0) {
+            languages = List.of("Unknown");
+        }
+
+    }
 
 }

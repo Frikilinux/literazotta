@@ -4,17 +4,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 
-import ar.zotta.literazotta.models.ApiResults;
-import ar.zotta.literazotta.models.BookData;
+import ar.zotta.literazotta.models.IsoLanguages;
 import ar.zotta.literazotta.utils.ZUtils;
 
-public class QueryApi {
+public class QueryLanguage {
 
-  public List<BookData> query(String searString) {
+  public static String query(String searString) {
 
-    final String BASE_URL = "https://gutendex.com/books/?search=";
+    final String BASE_URL = "https://iso-langs.vercel.app/langs/";
 
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
@@ -24,19 +22,18 @@ public class QueryApi {
     try {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-      var dataConverted = ZUtils.dataProcess(response.body(), ApiResults.class);
+      var dataConverted = ZUtils.dataProcess(response.body(), IsoLanguages.class);
 
-      if (dataConverted.results().isEmpty()) {
-        System.out.println("No se encontraron datos :(, intenta otra vez");
-        return List.of();
+      if (!dataConverted.getSuccess()) {
+        System.out.println("No se encontraron el idioma.");
+        return null;
       }
 
-      List<BookData> books = dataConverted.results();
-      return books;
+      return dataConverted.getData().getLanguage();
 
     } catch (Exception e) {
       System.out.println("Error perro: " + e);
-      return List.of();
+      return null;
       // throw new RuntimeException(e);
     }
   }
