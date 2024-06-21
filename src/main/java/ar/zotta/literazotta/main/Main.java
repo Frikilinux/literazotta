@@ -237,7 +237,8 @@ public class Main {
     author.setBook(book);
     try {
       libraryRepository.save(author);
-      System.out.println("\nGuardado " + book.getTitle() + " en la base de datos. :)");
+      System.out.println(CliColors.CYAN + "\nGuardado " + CliColors.GREEN_BOLD_BRIGHT + book.getTitle() + CliColors.CYAN
+          + " en la base de datos. :)" + CliColors.RESET);
 
     } catch (Exception e) {
       System.out.println("ERROR!: " + e);
@@ -247,7 +248,12 @@ public class Main {
   private void printBookList(List<BookData> bookList) {
     for (int i = 0; i < bookList.size(); i++) {
       String author = bookList.get(i).authors().get(0).name();
-      System.out.println(String.format("%d - Titulo: %s por %s", i + 1, bookList.get(i).title(), author));
+      System.out
+          .println(String.format(
+              CliColors.BLUE + "%d" + CliColors.RESET + " - " + CliColors.GREEN + " %s" + CliColors.RESET + " por "
+                  + CliColors.PURPLE + "%s" + CliColors.RESET,
+              i + 1,
+              bookList.get(i).title(), ZUtils.nameFormat(author)));
     }
   }
 
@@ -266,10 +272,11 @@ public class Main {
     printBookList(response);
 
     while (true) {
-      System.out.print("Seleccona un libro: ");
+      System.out.print("\nSeleccona un libro o 0 para ir al menú principal: ");
       int option = Integer.parseInt(userInput());
-
-      if (option <= 0 || option > response.size()) {
+      if (option == 0) {
+        break;
+      } else if (option < 0 || option > response.size()) {
         System.out.println("");
         System.out.println("Opcion incorrecta, excoge otra");
       } else {

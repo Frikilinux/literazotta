@@ -23,6 +23,7 @@ public record BookData(
         if (languages.size() == 0) {
             languages = List.of("Unknown");
         }
+
     }
 
 }
