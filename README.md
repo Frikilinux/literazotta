@@ -11,10 +11,10 @@ Crear un archivo `.env`  en la raíz del proyecto con el contenido:
 ```ini
 # .env
 
-DB_HOST=<DB HOST URL>
-DB_NAME=<DB NAME>
-DB_USERNAME=<DB USERNAME>
-DB_PASSWORD=<DB PASSWORD>
+DB_HOST = <DB HOST URL>
+DB_NAME = <DB NAME>
+DB_USERNAME = <DB USERNAME>
+DB_PASSWORD = <DB PASSWORD>
 ```
 
 ## Menú principal
